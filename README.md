@@ -34,6 +34,8 @@ Visual Web Scraping / API Web Scraping
 
     pip install scrapy
     
+    scrapy runspider quotes_spider.py -o quotes.json
+    
 ## Extra Credit
 
 
