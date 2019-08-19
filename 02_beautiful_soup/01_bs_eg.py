@@ -3,15 +3,15 @@ import requests
 
 """ Beautiful Soup Library Example:
 
-Using the Beautiful Soup library, you can query data from the web page - a.k.a
-the DOM (Document Object Model).
+Using the Beautiful Soup library, you can essentially "query" data from the 
+web page. This structure is known as the DOM (Document Object Model).
  
 (https://www.crummy.com/software/BeautifulSoup/bs4/doc/#)
+(http://quotes.toscrape.com/)
 
 """
 
 page = requests.get('http://quotes.toscrape.com/')
-
 
 soup = BeautifulSoup(page.content, features='html.parser')
 

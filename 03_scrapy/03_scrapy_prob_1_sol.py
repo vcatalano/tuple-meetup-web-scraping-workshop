@@ -41,7 +41,7 @@ class BooksSpider(scrapy.Spider):
 
         # Get the container element for product information
         product = response.css('div.product_main')
-        title = product.css("h1 ::text").extract_first()
+        title = product.css('h1 ::text').extract_first()
         category = response.xpath("//ul[@class='breadcrumb']/li[@class='active']/preceding-sibling::li[1]/a/text()").extract_first()
         description = response.xpath("//div[@id='product_description']/following-sibling::p/text()").extract_first()
         price = response.css('p.price_color ::text').extract_first()

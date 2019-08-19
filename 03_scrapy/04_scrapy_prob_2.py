@@ -4,11 +4,12 @@ from scrapy import Request
 
 """ Scrapy Framework Example:
 
-Now we get into some real web scraping. The Scrapy framework recognizes that
-many websites maintain a consistent format with h
+Here's another problem using some totally real-life web scraping. Here, we 
+are going to scrape rental housing data on Craigslist so we can run some cool 
+analytics on the dataset at another time.
  
 (https://scrapy.org/)
-(http://quotes.toscrape.com/)
+(https://tucson.craigslist.org/d/apts-housing-for-rent/search/apa)
 (https://developer.mozilla.org/en-US/docs/Learn/CSS/Introduction_to_CSS/Selectors)
 
 Run the following:
@@ -20,11 +21,12 @@ scrapy runspider 04_scrapy_prob_2.py -o rentals.json
 
 class RentalsSpider(scrapy.Spider):
 
-    MAX_PAGES_COUNT = 30
-
     name = 'craigslist_retnals'
 
-    allowed_domains = ['craigslist.org']
+    # An additional option to prevent us from scraping ALL THE THINGS
+    allowed_domains = [
+        'craigslist.org'
+    ]
 
     # These are the URLs you want to start scraping from
     start_urls = [
@@ -39,8 +41,9 @@ class RentalsSpider(scrapy.Spider):
 
     def parse(self, response):
 
-        # Get the common elements on the page that represent a listing
-        rentals = response.xpath('//p[@class="result-info"]')
+        # Get the common elements on the page that represent an individual
+        # listing
+        rentals = response.xpath('XPATH CONTAINER FOR THE RENTAL LIST ITEM')
 
         for rental in rentals:
 
@@ -48,37 +51,36 @@ class RentalsSpider(scrapy.Spider):
             relative_url = rental.xpath('a/@href').extract_first()
             absolute_url = response.urljoin(relative_url)
 
-            title = rental.xpath('a/text()').extract_first()
-            address = rental.xpath('span[@class="result-meta"]/span[@class="result-hood"]/text()').extract_first("")[2:-1]
+            title = rental.xpath('XPATH OF THE HREF TITLE').extract_first()
 
+            # This metadata gets passed down to the `parse_rental_page`
+            # function and allows you provide some additional information at
+            # the list level that you might not have at the individual item
+            # level
             meta = {
-                'URL': absolute_url,
-                'Title': title,
-                'Address': address
+                'url': absolute_url,
+                'title': title
             }
 
-            yield Request(absolute_url, callback=self.parse_page, meta=meta)
+            yield Request(absolute_url, callback=self.parse_rental_page, meta=meta)
 
-        relative_next_url = response.xpath('//a[@class="button next"]/@href').extract_first()
+        relative_next_url = response.xpath('XPATH OF THE NEXT BUTTON').extract_first()
         absolute_next_url = 'https://tucson.craigslist.org' + relative_next_url
 
         yield Request(absolute_next_url, callback=self.parse)
 
-    def parse_page(self, response):
-        url = response.meta.get('URL')
-        title = response.meta.get('Title')
-        address = response.meta.get('Address')
+    # Parses the information we want from a single rental page
+    def parse_rental_page(self, response):
+
+        url = response.meta.get('url')
+        title = response.meta.get('title')
 
         description = "".join(line for line in response.xpath('//*[@id="postingbody"]/text()').extract())
-
-        compensation = response.xpath('//p[@class="attrgroup"]/span[1]/b/text()').extract_first()
-        employment_type = response.xpath('//p[@class="attrgroup"]/span[2]/b/text()').extract_first()
+        address = response.css('CSS SELECTOR FOR ADDRESS ELEMENT').extract_first()
 
         yield {
-            'URL': url,
-            'Title': title,
-            'Address': address,
-            'Description': description,
-            'Compensation': compensation,
-            'Employment Type': employment_type
+            'url': url,
+            'title': title,
+            'description': description,
+            'address': address
         }
