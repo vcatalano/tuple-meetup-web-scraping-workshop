@@ -25,9 +25,3 @@
 
     pip install scrapy
     
-
-# 04 Selenium ()
-
-    pip install selenium
-
-https://chromedriver.chromium.org/downloads
