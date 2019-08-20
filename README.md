@@ -4,21 +4,12 @@
 
 * Python3
 
-
-## Getting Started
-
-You wi
-
-
-
 ## Websites
 
-
-http://toscrape.com/
-
-
-Visual Web Scraping / API Web Scraping
-
+* [Requests Library]: https://2.python-requests.org/en/master/
+* [Beautiful Soup]: https://www.crummy.com/software/BeautifulSoup/bs4/doc/
+* [Scrapy Framework]: https://scrapy.org/
+* [Scraping Playgrounds]: http://toscrape.com/
 
 # 01 Requests (https://requests.readthedocs.io/en/master/)
 
@@ -33,13 +24,6 @@ Visual Web Scraping / API Web Scraping
 # 03 Scrapy (https://scrapy.org/)
 
     pip install scrapy
-    
-    scrapy runspider quotes_spider.py -o quotes.json
-    
-## Extra Credit
-
-
-    
     
 
 # 04 Selenium ()
